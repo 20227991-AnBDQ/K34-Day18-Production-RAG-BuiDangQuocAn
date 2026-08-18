@@ -1,0 +1,112 @@
+{
+  "aggregate": {
+    "faithfulness": 1.0,
+    "answer_relevancy": 0.8044211344211345,
+    "context_precision": 1.0,
+    "context_recall": 0.8785300195601499
+  },
+  "evaluation_backend": "lexical_proxy",
+  "num_questions": 20,
+  "failures": [
+    {
+      "question": "Nếu cần mua một chiếc laptop 30 triệu cho nhân viên mới, ai phê duyệt và cần gì từ phòng CNTT?",
+      "expected": "Laptop 30 triệu nằm trong khoảng 5-50 triệu nên cần Giám đốc phòng ban (Director) phê duyệt. Ngoài ra, mua sắm thiết bị CNTT cần có xác nhận cấu hình kỹ thuật từ phòng CNTT trước khi đề xuất. Cần đính kèm ít nhất 3 báo giá vì trên 10 triệu.",
+      "answer": "Chi phí được tài trợ tối đa **30.000.000 VNĐ/khóa** và cần phê duyệt của Giám đốc phòng ban. Nghỉ từ 6-15 ngày: cần thêm phê duyệt của Giám đốc Nhân sự. Nghỉ từ 16-30 ngày: cần phê duyệt của **Giám đốc điều hành (CEO)**.",
+      "average_score": 0.7395348837209302,
+      "worst_metric": "answer_relevancy",
+      "score": 0.4,
+      "diagnosis": "The answer does not directly address the question.",
+      "suggested_fix": "Use a question-focused answer template and remove unrelated context from the response."
+    },
+    {
+      "question": "Một nhân viên Senior có 9 năm thâm niên được nghỉ bao nhiêu ngày phép năm và lương trong khoảng nào?",
+      "expected": "Theo chính sách v2024: 15 ngày cơ bản + 3 ngày thâm niên (9÷3=3) = 18 ngày phép. Lương Senior (P3-P4): 20-35 triệu VNĐ/tháng.",
+      "answer": "Nhân viên có thâm niên từ **3 năm trở lên** được cộng thêm **1 ngày phép** cho mỗi 3 năm làm việc liên tục. Ví dụ: nhân viên 9 năm thâm niên được 18 ngày phép (15 + 3). Mỗi nhân viên chính thức được hưởng **15 ngày phép năm** có lương, tăng từ 12 ngày so với chính sách năm 2023.",
+      "average_score": 0.7954545454545454,
+      "worst_metric": "context_recall",
+      "score": 0.5454545454545454,
+      "diagnosis": "The retriever missed information needed for the reference answer.",
+      "suggested_fix": "Improve chunk boundaries, retrieve more candidates, or add query expansion/BM25."
+    },
+    {
+      "question": "Lương thử việc của nhân viên Junior mức cao nhất là bao nhiêu?",
+      "expected": "Junior cao nhất là 20.000.000 VNĐ/tháng. Lương thử việc = 85% x 20.000.000 = 17.000.000 VNĐ/tháng.",
+      "answer": "Nhân viên thử việc được nhận **85% mức lương** của cấp bậc tương ứng theo bảng lương công ty. Nhân viên trong thời gian thử việc được nhận **85% lương** của cấp bậc tương ứng. Trường hợp cần nghỉ việc riêng, nhân viên thử việc phải xin nghỉ không lương và được trưởng phòng phê duyệt.",
+      "average_score": 0.8351648351648352,
+      "worst_metric": "answer_relevancy",
+      "score": 0.5714285714285714,
+      "diagnosis": "The answer does not directly address the question.",
+      "suggested_fix": "Use a question-focused answer template and remove unrelated context from the response."
+    },
+    {
+      "question": "Nhân viên được nghỉ bao nhiêu ngày phép năm?",
+      "expected": "Theo chính sách hiện hành (v2024), nhân viên được nghỉ 15 ngày phép năm có lương. Chính sách cũ (v2023) là 12 ngày nhưng đã bị thay thế.",
+      "answer": "Mỗi nhân viên chính thức được hưởng **15 ngày phép năm** có lương, tăng từ 12 ngày so với chính sách năm 2023. Nhân viên có thâm niên từ **3 năm trở lên** được cộng thêm **1 ngày phép** cho mỗi 3 năm làm việc liên tục. Ví dụ: nhân viên 9 năm thâm niên được 18 ngày phép (15 + 3).",
+      "average_score": 0.8585526315789473,
+      "worst_metric": "context_recall",
+      "score": 0.6842105263157895,
+      "diagnosis": "The retriever missed information needed for the reference answer.",
+      "suggested_fix": "Improve chunk boundaries, retrieve more candidates, or add query expansion/BM25."
+    },
+    {
+      "question": "Bao lâu phải đổi mật khẩu một lần?",
+      "expected": "Theo chính sách hiện hành (v2.0), mật khẩu phải được thay đổi mỗi 120 ngày. Chính sách cũ yêu cầu 90 ngày nhưng đã bị thay thế.",
+      "answer": "Mật khẩu phải có tối thiểu **8 ký tự**, bao gồm ít nhất 1 chữ hoa, 1 chữ thường và 1 số. Mật khẩu phải được thay đổi **mỗi 90 ngày**. Mật khẩu phải có tối thiểu **12 ký tự**, bao gồm ít nhất 1 chữ hoa, 1 chữ thường, 1 số và 1 ký tự đặc biệt (!@#$%^&*).",
+      "average_score": 0.888095238095238,
+      "worst_metric": "answer_relevancy",
+      "score": 0.6,
+      "diagnosis": "The answer does not directly address the question.",
+      "suggested_fix": "Use a question-focused answer template and remove unrelated context from the response."
+    },
+    {
+      "question": "Nhân viên tạm ứng 15 triệu, sau 20 ngày mới thanh toán. Bị phạt bao nhiêu?",
+      "expected": "Thời hạn thanh toán là 15 ngày. Quá hạn 5 ngày, bị tính phí 2%/tháng trên 15.000.000 VNĐ = 300.000 VNĐ/tháng (tính pro-rata khoảng 50.000 VNĐ cho 5 ngày).",
+      "answer": "Khoản tạm ứng chưa thanh toán sau 15 ngày sẽ bị tính phí **2%/tháng** trên số tiền chưa hoàn ứng. Nhân viên có khoản tạm ứng chưa thanh toán sẽ không được phê duyệt tạm ứng mới. Khoản tạm ứng phải được thanh toán (nộp chứng từ hoàn ứng) trong vòng **15 ngày** kể từ ngày nhận tiền.",
+      "average_score": 0.8898809523809523,
+      "worst_metric": "answer_relevancy",
+      "score": 0.75,
+      "diagnosis": "The answer does not directly address the question.",
+      "suggested_fix": "Use a question-focused answer template and remove unrelated context from the response."
+    },
+    {
+      "question": "Thông tin lương thuộc cấp độ phân loại dữ liệu nào?",
+      "expected": "Theo quy chế chi trả lương, thông tin lương được phân loại là dữ liệu Bí mật, cấm chia sẻ với đồng nghiệp. Theo chính sách phân loại dữ liệu, dữ liệu Bí mật (cấp 3) phải mã hóa khi truyền và hạn chế truy cập theo need-to-know.",
+      "answer": "Vi phạm chính sách phân loại dữ liệu sẽ bị xử lý kỷ luật theo Quy chế kỷ luật công ty, mức cao nhất là sa thải và chịu trách nhiệm pháp lý. > Phiên bản: 1.0 | Ngày hiệu lực: 01/06/2024 | Phòng ban: CNTT & An ninh thông tin | Cấp độ | Nhãn | Ví dụ |",
+      "average_score": 0.8914956011730205,
+      "worst_metric": "answer_relevancy",
+      "score": 0.7272727272727273,
+      "diagnosis": "The answer does not directly address the question.",
+      "suggested_fix": "Use a question-focused answer template and remove unrelated context from the response."
+    },
+    {
+      "question": "Có cần kích hoạt xác thực đa yếu tố (MFA) không?",
+      "expected": "Có, theo chính sách mật khẩu v2.0 hiện hành, tất cả nhân viên bắt buộc kích hoạt MFA cho email, VPN và hệ thống nội bộ. Chính sách cũ v1.0 không yêu cầu MFA.",
+      "answer": "Để kích hoạt lại, nhân viên cần gửi yêu cầu qua ticket IT kèm xác nhận của quản lý trực tiếp. Tất cả nhân viên **bắt buộc** kích hoạt MFA cho tài khoản email, VPN và các hệ thống nội bộ. Phép năm không sử dụng hết có thể chuyển tối đa 5 ngày sang năm sau, hết hạn vào 31/03 năm kế tiếp.",
+      "average_score": 0.9057692307692308,
+      "worst_metric": "answer_relevancy",
+      "score": 0.7,
+      "diagnosis": "The answer does not directly address the question.",
+      "suggested_fix": "Use a question-focused answer template and remove unrelated context from the response."
+    },
+    {
+      "question": "Nhân viên được tài trợ khóa học 25 triệu, nghỉ việc sau 8 tháng hoàn thành khóa học. Phải hoàn trả bao nhiêu?",
+      "expected": "Nhân viên phải cam kết làm việc ít nhất 1 năm sau khi hoàn thành khóa học. Nghỉ sau 8 tháng là trước hạn cam kết, phải hoàn trả 100% chi phí tức 25.000.000 VNĐ.",
+      "answer": "Nhân viên được tài trợ đào tạo phải **cam kết làm việc tại công ty ít nhất 1 năm** sau khi hoàn thành khóa học. Nếu nghỉ việc trước thời hạn cam kết, nhân viên phải hoàn trả **100% chi phí** đào tạo đã được tài trợ. Sau mỗi khóa đào tạo, nhân viên cần hoàn thành bài đánh giá và khảo sát phản hồi.",
+      "average_score": 0.9134615384615384,
+      "worst_metric": "answer_relevancy",
+      "score": 0.7692307692307693,
+      "diagnosis": "The answer does not directly address the question.",
+      "suggested_fix": "Use a question-focused answer template and remove unrelated context from the response."
+    },
+    {
+      "question": "Muốn mua thiết bị trị giá 55 triệu cần ai phê duyệt?",
+      "expected": "Đơn hàng trên 50.000.000 VNĐ cần Tổng Giám đốc (CEO) phê duyệt.",
+      "answer": "| Giá trị đơn hàng | Người phê duyệt | Mua sắm thiết bị CNTT (laptop, server, phần mềm) cần có xác nhận của phòng CNTT về cấu hình kỹ thuật trước khi đề xuất. Chờ phê duyệt theo thẩm quyền tương ứng",
+      "average_score": 0.9166666666666666,
+      "worst_metric": "answer_relevancy",
+      "score": 0.6666666666666666,
+      "diagnosis": "The answer does not directly address the question.",
+      "suggested_fix": "Use a question-focused answer template and remove unrelated context from the response."
+    }
+  ]
+}

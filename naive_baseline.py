@@ -5,14 +5,16 @@ Basic = paragraph chunking + dense-only search (không hybrid, không rerank, kh
 Đây là RAG đã học ở buổi trước — hôm nay sẽ cải thiện từng bước.
 """
 
-import sys, os, time
+import os
+import sys
+import time
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
-from src.m1_chunking import load_documents, chunk_basic
-from src.m2_search import DenseSearch
-from src.m4_eval import load_test_set, evaluate_ragas, save_report
 from config import NAIVE_COLLECTION
+from src.m1_chunking import chunk_basic, load_documents
+from src.m2_search import DenseSearch
+from src.m4_eval import evaluate_ragas, load_test_set, save_report
 
 
 def main():
@@ -34,10 +36,12 @@ def main():
     test_set = load_test_set()
     questions, answers, all_contexts, ground_truths = [], [], [], []
 
-    from config import OPENAI_API_KEY
+    from config import OPENAI_API_KEY, OPENAI_MODEL
+
     llm_client = None
     if OPENAI_API_KEY:
         from openai import OpenAI
+
         llm_client = OpenAI()
 
     for i, item in enumerate(test_set):
@@ -47,12 +51,21 @@ def main():
         if llm_client and contexts:
             try:
                 context_str = "\n\n".join(contexts)
-                resp = llm_client.chat.completions.create(model="gpt-4o-mini", messages=[
-                    {"role": "system", "content": "Trả lời CHỈ dựa trên context. Nếu không có → nói 'Không tìm thấy.'"},
-                    {"role": "user", "content": f"Context:\n{context_str}\n\nCâu hỏi: {item['question']}"},
-                ])
+                resp = llm_client.chat.completions.create(
+                    model=OPENAI_MODEL,
+                    messages=[
+                        {
+                            "role": "system",
+                            "content": "Trả lời CHỈ dựa trên context. Nếu không có → nói 'Không tìm thấy.'",
+                        },
+                        {
+                            "role": "user",
+                            "content": f"Context:\n{context_str}\n\nCâu hỏi: {item['question']}",
+                        },
+                    ],
+                )
                 answer = resp.choices[0].message.content
-            except Exception:
+            except Exception:  # noqa: BLE001 - OpenAI boundary
                 answer = contexts[0]
         else:
             answer = contexts[0] if contexts else "Không tìm thấy."
@@ -61,13 +74,18 @@ def main():
         questions.append(item["question"])
         all_contexts.append(contexts)
         ground_truths.append(item["ground_truth"])
-        print(f"  [{i+1}/{len(test_set)}] {item['question'][:50]}...", flush=True)
+        print(f"  [{i + 1}/{len(test_set)}] {item['question'][:50]}...", flush=True)
 
     results = evaluate_ragas(questions, answers, all_contexts, ground_truths)
     print("\nBASIC BASELINE SCORES")
-    for m in ["faithfulness", "answer_relevancy", "context_precision", "context_recall"]:
+    for m in [
+        "faithfulness",
+        "answer_relevancy",
+        "context_precision",
+        "context_recall",
+    ]:
         print(f"  {m}: {results.get(m, 0):.4f}")
-    save_report(results, [], path="naive_baseline_report.json")
+    save_report(results, [], path="reports/naive_baseline_report.json")
     print("\nDone! Now implement advanced modules and run: python main.py")
 
 

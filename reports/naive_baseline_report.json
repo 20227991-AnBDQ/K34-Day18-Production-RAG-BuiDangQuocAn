@@ -1,0 +1,11 @@
+{
+  "aggregate": {
+    "faithfulness": 1.0,
+    "answer_relevancy": 0.7586530136530136,
+    "context_precision": 1.0,
+    "context_recall": 0.7421883015958595
+  },
+  "evaluation_backend": "lexical_proxy",
+  "num_questions": 20,
+  "failures": []
+}

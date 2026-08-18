@@ -24,19 +24,16 @@ def main():
     print("\n📌 STEP 1: Running Basic RAG Baseline...")
     print("-" * 40)
     from naive_baseline import main as run_baseline
+
     run_baseline()
 
     # Step 2: Production Pipeline
     print("\n📌 STEP 2: Running Production Pipeline...")
     print("-" * 40)
     from src.pipeline import build_pipeline, evaluate_pipeline
-    search, reranker = build_pipeline()
-    prod_results = evaluate_pipeline(search, reranker)
 
-    # Move reports to reports/
-    for f in ["ragas_report.json", "naive_baseline_report.json"]:
-        if os.path.exists(f):
-            os.rename(f, f"reports/{f}")
+    search, reranker = build_pipeline()
+    evaluate_pipeline(search, reranker)
 
     # Step 3: Comparison
     print("\n📌 STEP 3: Comparison")
@@ -52,7 +49,12 @@ def main():
 
         print(f"\n{'Metric':<25} {'Basic':>8} {'Production':>12} {'Δ':>8}")
         print("-" * 55)
-        for m in ["faithfulness", "answer_relevancy", "context_precision", "context_recall"]:
+        for m in [
+            "faithfulness",
+            "answer_relevancy",
+            "context_precision",
+            "context_recall",
+        ]:
             n = naive.get("aggregate", {}).get(m, 0)
             p = prod.get("aggregate", {}).get(m, 0)
             d = p - n

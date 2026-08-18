@@ -7,8 +7,16 @@ Chạy: python check_lab.py
 
 import json
 import os
-import sys
+import re
 import subprocess
+import sys
+
+for _stream in (sys.stdout, sys.stderr):
+    if hasattr(_stream, "reconfigure"):
+        try:
+            _stream.reconfigure(encoding="utf-8", errors="replace")
+        except (AttributeError, ValueError):
+            pass
 
 
 def check_file(path: str, required: bool = True) -> bool:
@@ -56,21 +64,21 @@ def run_tests() -> tuple[int, int]:
     try:
         result = subprocess.run(
             [sys.executable, "-m", "pytest", "tests/", "-v", "--tb=no", "-q"],
-            capture_output=True, text=True, timeout=120,
+            capture_output=True,
+            text=True,
+            timeout=120,
+            check=False,
         )
-        lines = result.stdout.strip().split("\n")
-        summary = lines[-1] if lines else ""
-        # Parse "X passed, Y failed" or "X passed"
-        passed = total = 0
-        for part in summary.split(","):
-            part = part.strip()
-            if "passed" in part:
-                passed = int(part.split()[0])
-                total += passed
-            if "failed" in part:
-                total += int(part.split()[0])
+        # Pytest may wrap its summary in "====" and append warnings. Search the
+        # complete output rather than assuming the final line starts with a number.
+        output = f"{result.stdout}\n{result.stderr}"
+        passed_match = re.search(r"(\d+)\s+passed\b", output)
+        failed_match = re.search(r"(\d+)\s+failed\b", output)
+        passed = int(passed_match.group(1)) if passed_match else 0
+        failed = int(failed_match.group(1)) if failed_match else 0
+        total = passed + failed
         return passed, total
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001 - checker must report subprocess failures
         print(f"  ⚠️  pytest error: {e}")
         return 0, 0
 
@@ -81,8 +89,13 @@ def validate():
 
     # 1. Source files
     print("📁 Source code:")
-    for f in ["src/m1_chunking.py", "src/m2_search.py", "src/m3_rerank.py",
-              "src/m4_eval.py", "src/pipeline.py"]:
+    for f in [
+        "src/m1_chunking.py",
+        "src/m2_search.py",
+        "src/m3_rerank.py",
+        "src/m4_eval.py",
+        "src/pipeline.py",
+    ]:
         if not check_file(f):
             errors += 1
 
@@ -105,7 +118,11 @@ def validate():
     reflections = []
     ref_dir = "analysis/reflections"
     if os.path.isdir(ref_dir):
-        reflections = [f for f in os.listdir(ref_dir) if f.startswith("reflection_") and f.endswith(".md")]
+        reflections = [
+            f
+            for f in os.listdir(ref_dir)
+            if f.startswith("reflection_") and f.endswith(".md")
+        ]
     if reflections:
         for r in reflections:
             print(f"  ✅ {ref_dir}/{r}")
@@ -125,7 +142,9 @@ def validate():
     passed, total = run_tests()
     if total > 0:
         pct = passed / total * 100
-        print(f"  {'✅' if pct >= 80 else '⚠️'} {passed}/{total} tests passed ({pct:.0f}%)")
+        print(
+            f"  {'✅' if pct >= 80 else '⚠️'} {passed}/{total} tests passed ({pct:.0f}%)"
+        )
     else:
         print("  ⚠️  Không chạy được tests")
 

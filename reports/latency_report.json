@@ -1,0 +1,12 @@
+{
+  "unit": "milliseconds",
+  "steps": {
+    "chunking": 214.9357999996937,
+    "enrichment": 5.828100000144332,
+    "indexing": 29190.85240000004,
+    "reranker_initialization": 0.020000000404252205,
+    "query_average": 13.034260000085851,
+    "query_p95": 13.478599999871221,
+    "evaluation": 9.006300000692136
+  }
+}

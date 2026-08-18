@@ -1,12 +1,28 @@
 """Shared configuration for Lab 18."""
 
 import os
+import sys
+
 from dotenv import load_dotenv
 
 load_dotenv()
 
+# This project uses PyTorch-backed SentenceTransformers only. Prevent
+# Transformers from importing an unrelated, potentially incompatible TF stack.
+os.environ.setdefault("USE_TF", "0")
+
+# Windows may inherit a legacy cp1252 console even though all project files and
+# output are UTF-8 Vietnamese. Reconfigure safely for every CLI entry point.
+for _stream in (sys.stdout, sys.stderr):
+    if hasattr(_stream, "reconfigure"):
+        try:
+            _stream.reconfigure(encoding="utf-8", errors="replace")
+        except (AttributeError, ValueError):
+            pass
+
 # --- API Keys ---
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY", "")
+OPENAI_MODEL = os.getenv("OPENAI_MODEL", "gpt-4o-mini")
 
 # --- Qdrant ---
 QDRANT_HOST = "localhost"
